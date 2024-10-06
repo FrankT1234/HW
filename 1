@@ -1,3 +1,4 @@
+
 import math
 import numpy as np
 
@@ -7,54 +8,63 @@ def f(x):
 def df(x):
     return math.sin(3 * x) + 3 * x * math.cos(3 * x) - math.exp(x)
 
-
 x_newton = []
-x_n = -1.6  # Initial guess
+x_n = -1.6  
 x_newton.append(x_n)
-tolerance = 1e-6
+tolerance = 1e-6 
 max_iter = 1000
 iteration_newton = 0
 
-while abs(f(x_n)) > tolerance and iteration_newton < max_iter:
+while iteration_newton < max_iter:
+    
     f_xn = f(x_n)
     df_xn = df(x_n)
+    
     if df_xn == 0:
-        print("Zero derivative. No solution found.")
         break
-    x_n1 = x_n - f_xn / df_xn
-    x_newton.append(x_n1)
-    x_n = x_n1
+    x_n = x_n - f_xn / df_xn
+    x_newton.append(x_n)
     iteration_newton += 1
+    if abs(f_xn) < tolerance:
+        break
 
+
+A1 = x_newton
 
 a = -0.7
 b = -0.4
 if f(a) * f(b) >= 0:
-    print("Bisection method fails.")
     x_bisect = []
     iteration_bisect = 0
 else:
     x_bisect = []
     iteration_bisect = 0
-    while (b - a) / 2.0 > tolerance:
-        c = (a + b) / 2.0
-        x_bisect.append(c)
-        iteration_bisect += 1
-        if f(c) == 0:
+    while iteration_bisect < max_iter:
+        
+        c = (a + b) / 2
+        fc = f(c)
+        print((b-a)/2)        
+        if f(c) == 0 or (b-a)/2 < tolerance:
             break
-        elif f(a) * f(c) < 0:
+        elif f(a) * fc < 0:
             b = c
+            x_bisect.append(c)
+            iteration_bisect += 1
         else:
             a = c
+            x_bisect.append(c)
+            iteration_bisect += 1
+        
+        
 
-A1 = x_newton
 A2 = x_bisect
-A3 = [iteration_newton, iteration_bisect]
+A2.pop()
+
+A3 = [len(A1) - 1, len(A2)]
 
 print("A1:", A1)
 print("A2:", A2)
 print("A3:", A3)
-
 
 
 A = np.array([[1, 2],
@@ -70,42 +80,44 @@ D = np.array([[1, 2],
               [2, 3],
               [-1, 0]])
 
-x = np.array([[1],
-              [0]])
+x = np.array([1, 0])  
+y = np.array([0, 1])  
+z = np.array([1, 2, -1])  
 
-y = np.array([[0],
-              [1]])
-
-z = np.array([[1],
-              [2],
-              [-1]])
-
-
+# (a) A+B
 A4 = A + B
 
+# (b) 3x - 4y
 A5 = 3 * x - 4 * y
 
+# (c) Ax
 A6 = A @ x
 
+# (d) B(x - y)
 A7 = B @ (x - y)
 
+# (e) D x
 A8 = D @ x
 
+# (f) D y + z
 A9 = D @ y + z
 
+# (g) AB
 A10 = A @ B
 
+# (h) BC
 A11 = B @ C
 
+# (i) CD
 A12 = C @ D
 
-print("A4:\n", A4)
-print("A5:\n", A5)
-print("A6:\n", A6)
-print("A7:\n", A7)
-print("A8:\n", A8)
-print("A9:\n", A9)
-print("A10:\n", A10)
-print("A11:\n", A11)
-print("A12:\n", A12)
 
+print("\nA4:\n", A4)
+print("\nA5:\n", A5)
+print("\nA6:\n", A6)
+print("\nA7:\n", A7)
+print("\nA8:\n", A8)
+print("\nA9:\n", A9)
+print("\nA10:\n", A10)
+print("\nA11:\n", A11)
+print("\nA12:\n", A12)
